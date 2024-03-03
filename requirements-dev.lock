@@ -8,3 +8,9 @@
 #   with-sources: false
 
 -e file:.
+mypy==1.8.0
+mypy-extensions==1.0.0
+    # via mypy
+ruff==0.3.0
+typing-extensions==4.10.0
+    # via mypy
