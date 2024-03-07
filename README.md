@@ -18,3 +18,7 @@ This repository aims to:
 - Provide the Outbox Pattern support for your messages
 
 We'll see what brokers, databases and platforms we can support for easy integration - time will tell. If you have any requests or suggestions, please raise an issue!
+
+## Current progress
+
+Right now the focus is on establishing some sensible interfaces for this library
