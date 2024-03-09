@@ -1,12 +1,8 @@
 from typing import Protocol, TypeVar
 
-
-class Message:
-    pass
-
-
 TMsg = TypeVar("TMsg")
 
 
-class OutboxMessage(Protocol[TMsg]):
+class Envelope(Protocol[TMsg]):
+    message_type: str
     message: TMsg

@@ -8,7 +8,7 @@ authors = [
 dependencies = [
 ]
 readme = "README.md"
-requires-python = ">= 3.12"
+requires-python = ">=3.11,<3.12"
 
 [project.scripts]
 hello = "pyvelope:hello"
@@ -23,6 +23,9 @@ dev-dependencies = [
     "mypy>=1.8.0",
     "ruff>=0.3.0",
     "pytest>=8.1.0",
+    "dependency-injector>=4.41.0",
+    "pdbpp>=0.10.3",
+    "ipython>=8.22.2",
 ]
 
 [tool.hatch.metadata]

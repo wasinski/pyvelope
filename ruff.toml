@@ -32,59 +32,20 @@ exclude = [
 
 line-length = 90
 indent-width = 4
-target-version = "py312"
+target-version = "py311"
 preview = true
 
 [lint]
 select = [
-	# main
-	"E", # pycodestyle errors
-	"F", # flake8 base
-	"W", # pycodestyle warnings
-	"C90", # mccabe
-	"I", # isort
-	"N", # naming
-	"S", # bandit
-	# somewhat additional
-	"B", # bugbear
-	"C4", # comprehensions
-	"DTZ", # datetimez
-	"T10", # debugger
-	"EM", # error messages
-	"G", # logging format
-	"INP", # implicit namespace packages
-	"PIE", # pie - many minor issues
-	"T20", # prints
-	"PT", # pytest style
-	"RSE", # raises
-	"INT", # gettext
-	"RET", # returns
-	"SLF", # private member access (_)
-	"SIM", # simplify
-	"SLOT", # slots
-	"TID", # tidy imports
-	"TCH", # typecheck-related
-	"ARG", # arguments
-	"PTH", # pathlib
-	"ERA", # erradicate
-	"LOG", # logging
-	"PL", # pyling
-	"TRY", # tryceratops
-	"RUF", # ruff
-	"UP", # pyupgrade
-	"A", # builins
-	"ASYNC", # async
-	"PYI", # pyi
-	"TD", # todos
-	"FIX", # fixme
-	"PERF", # performance
-	"FURB", # refurb
+	"ALL"
 ]
 ignore = [
-	# "D",
+	"D",  # !! temporairly
+	"T201", # !! temporairly
 	# "UP",
-	# "S101",
-	# "ANN",
+	"S101",  # asserts
+	"ANN",
+	"CPY",
 	# "A",
 	# below are formatting related that can conflict with black-style formatting
 	"W191",
@@ -109,6 +70,9 @@ unfixable = []
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[lint.per-file-ignores]
+"examples/*.py" = ["T201"]
 
 [format]
 # Like Black
