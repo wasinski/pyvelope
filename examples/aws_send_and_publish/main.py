@@ -22,10 +22,15 @@ class PublisherService:
         self.message_bus.publish(MyEvent("Hello, World!"))
 
     def send_command(self) -> None:
-        self.message_bus.send(MyCommand("Hello, World!"), None)
+        self.message_bus.send(MyCommand("Hello, you!"), None)
 
     def send_to_address(self) -> None:
-        self.message_bus.send(MyCommand("Hello, World!"), SendAddress("my_address"))
+        self.message_bus.send(MyCommand("Hello, you address!"), SendAddress("my_address"))
+
+    def send_to_bound_address(self) -> None:
+        self.message_bus.send(
+            MyCommand("Hello, you bound address"), SendAddress("my_address")
+        )
 
     def send_reply(self, received_message: Envelope[MyCommand]) -> None:
         self.message_bus.send(

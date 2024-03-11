@@ -18,7 +18,7 @@ class MessageBus(Protocol):
         to this message type.
         """
 
-    def send(self, message: TMsg, address: SendAddress | None) -> None:
+    def send(self, message: TMsg, address: SendAddress | None = None) -> None:
         """Send a message to a specific address.
 
         If the address is None the MessageBus will try to resolve it from the message type.
