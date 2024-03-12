@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from pyvelope.abstractions.message_bus import MessageBus, SendAddress
+from pyvelope.abstractions.message_bus import Consumer, MessageBus, SendAddress
 from pyvelope.abstractions.messages import Envelope
 
 
@@ -14,6 +14,16 @@ class MyCommand:
     body: str
 
 
+@dataclass
+class MySecondCommand:
+    body: str
+
+
+class ConsumerOfSecondCommand(Consumer[MySecondCommand]):
+    def consume(self, message: Envelope[MySecondCommand]) -> None:
+        print(f"Received message: {message.body}")
+
+
 class PublisherService:
     def __init__(self, message_bus: MessageBus) -> None:
         self.message_bus = message_bus
@@ -22,14 +32,14 @@ class PublisherService:
         self.message_bus.publish(MyEvent("Hello, World!"))
 
     def send_command(self) -> None:
-        self.message_bus.send(MyCommand("Hello, you!"), None)
+        self.message_bus.send(MyCommand("Hello, you!"))
 
     def send_to_address(self) -> None:
         self.message_bus.send(MyCommand("Hello, you address!"), SendAddress("my_address"))
 
     def send_to_bound_address(self) -> None:
         self.message_bus.send(
-            MyCommand("Hello, you bound address"), SendAddress("my_address")
+            MyCommand("Hello, you bound address"), SendAddress(ConsumerOfSecondCommand)
         )
 
     def send_reply(self, received_message: Envelope[MyCommand]) -> None:
