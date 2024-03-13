@@ -46,3 +46,29 @@ class PublisherService:
         self.message_bus.send(
             {"body": "Hi! Got your message"}, address=received_message.reply_address()
         )
+
+
+if __name__ == "__main__":
+    # setup mocks
+    message_bus = MessageBus()
+
+    publisher_service = PublisherService(message_bus)
+
+    publisher_service.publish_event()
+    # ? assert
+
+    publisher_service.send_command()
+    # ? assert
+
+    publisher_service.send_to_address()
+    # ? assert
+
+    publisher_service.send_to_bound_address()
+    # ? assert
+
+    # fake an incoming message and send a reply, faking is needed to have it working without a "real" message bus
+    received_message = Envelope(
+        MyCommand("Hello, you!"), sender=SendAddress("my_address")
+    )
+    publisher_service.send_reply(received_message=received_message)
+    # ? assert
