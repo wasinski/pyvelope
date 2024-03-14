@@ -50,25 +50,30 @@ class PublisherService:
 
 if __name__ == "__main__":
     # setup mocks
+    from unittest.mock import Mock
+    sqs_client = Mock()
+    eventbridge_client = Mock()
+
     message_bus = MessageBus()
+    message_bus.add_transport(SqsTransport(sqs_client))
+    message_bus.add_transport(EventBridgeTransport(eventbridge_client))
 
     publisher_service = PublisherService(message_bus)
 
     publisher_service.publish_event()
-    # ? assert
-
+    assert eventbridge_client.put_events.call_count == 1
     publisher_service.send_command()
-    # ? assert
+    assert sqs_client.send_message.call_count == 1
 
     publisher_service.send_to_address()
-    # ? assert
+    assert sqs_client.send_message.call_count == 2
 
     publisher_service.send_to_bound_address()
-    # ? assert
+    assert sqs_client.send_message.call_count == 3
 
     # fake an incoming message and send a reply, faking is needed to have it working without a "real" message bus
     received_message = Envelope(
         MyCommand("Hello, you!"), sender=SendAddress("my_address")
     )
     publisher_service.send_reply(received_message=received_message)
-    # ? assert
+    assert sqs_client.send_message.call_count == 4
