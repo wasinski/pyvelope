@@ -55,8 +55,16 @@ if __name__ == "__main__":
     eventbridge_client = Mock()
 
     message_bus = MessageBus()
-    message_bus.add_transport(SqsTransport(sqs_client))
-    message_bus.add_transport(EventBridgeTransport(eventbridge_client))
+    sqs_transport = SqsTransport()
+    sqs_transport.bind_consumer(ConsumerOfSecondCommand)
+    sqs_transport.bind_consumer_of_msg(MyCommand)
+    sqs_transport.bind_consumer_of_msg(MyEvent, queue_name="special-my-event-queue")
+
+    eventbridge_transport = EventBridgeTransport(eventbridge_client)
+    eventbridge_transport.bind_consumer_of_msg(MyEvent)
+
+    message_bus.add_transport(sqs_transport)
+    message_bus.add_transport(eventbridge_transport)
 
     publisher_service = PublisherService(message_bus)
 
