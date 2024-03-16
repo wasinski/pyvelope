@@ -51,17 +51,18 @@ class PublisherService:
 if __name__ == "__main__":
     # setup mocks
     from unittest.mock import Mock
+
     sqs_client = Mock()
     eventbridge_client = Mock()
 
     message_bus = MessageBus()
     sqs_transport = SqsTransport()
     sqs_transport.bind_consumer(ConsumerOfSecondCommand)
-    sqs_transport.bind_consumer_of_msg(MyCommand)
-    sqs_transport.bind_consumer_of_msg(MyEvent, queue_name="special-my-event-queue")
+    sqs_transport.bind_msg_type(MyCommand)
+    sqs_transport.bind_msg_type(MyEvent, queue_name="special-my-event-queue")
 
     eventbridge_transport = EventBridgeTransport(eventbridge_client)
-    eventbridge_transport.bind_consumer_of_msg(MyEvent)
+    eventbridge_transport.bind_msg_type(MyEvent)
 
     message_bus.add_transport(sqs_transport)
     message_bus.add_transport(eventbridge_transport)
