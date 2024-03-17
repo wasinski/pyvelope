@@ -1,5 +1,7 @@
 from typing import Protocol
 
+from pyvelope._pyvelope.abstractions.message_bus import Consumer
+
 
 class Transport(Protocol):
     def bind_consumer(self, consumer_type: type[Consumer]) -> None:

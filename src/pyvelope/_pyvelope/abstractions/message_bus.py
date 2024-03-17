@@ -1,6 +1,7 @@
 from typing import Protocol, TypeVar
 
-from pyvelope.abstractions.messages import Envelope
+from pyvelope._pyvelope.abstractions.messages import Envelope
+
 
 TMsg = TypeVar("TMsg")
 SendAddress = str  # TODO: Define the AddressEndpoint type
