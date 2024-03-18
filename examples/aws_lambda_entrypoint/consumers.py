@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from pyvelope.abstractions.message_bus import Consumer
-from pyvelope.abstractions.messages import Envelope
+from pyvelope._pyvelope.abstractions.message_bus import Consumer
+from pyvelope._pyvelope.abstractions.messages import Envelope
 
 
 class AssertState:

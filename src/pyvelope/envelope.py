@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
-from pyvelope.abstractions.messages import Envelope, TMsg
+from pyvelope._pyvelope.abstractions.message_bus import TMsg
+from pyvelope._pyvelope.abstractions.messages import Envelope
+
 
 
 @dataclass

@@ -5,7 +5,7 @@ from examples.aws_lambda_entrypoint.consumers import (
 )
 from examples.aws_lambda_entrypoint.di import ServiceProvider
 from examples.aws_lambda_entrypoint.utils import eventbridge_event_factory
-from pyvelope.abstractions.messages import Envelope
+from pyvelope._pyvelope.abstractions.messages import Envelope
 from pyvelope.envelope import EnvelopeRecord
 
 
