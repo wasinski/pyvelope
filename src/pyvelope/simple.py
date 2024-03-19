@@ -3,8 +3,8 @@ from collections.abc import Callable
 from dataclasses import replace
 from typing import get_type_hints
 
-from pyvelope.abstractions.message_bus import Consumer
-from pyvelope.abstractions.messages import Envelope
+from pyvelope._pyvelope.abstractions.message_bus import Consumer
+from pyvelope._pyvelope.abstractions.messages import Envelope
 
 
 def get_consumer_envelope_wrapped_type(func):
