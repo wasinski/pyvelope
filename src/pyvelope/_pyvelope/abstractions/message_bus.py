@@ -4,7 +4,27 @@ from pyvelope._pyvelope.abstractions.messages import Envelope
 
 
 TMsg = TypeVar("TMsg")
-SendAddress = str  # TODO: Define the AddressEndpoint type
+
+
+class ConsumerAddressResolver(Protocol):
+    def resolve_address(self, consumer: "Consumer") -> str:
+        """Resolve the address of the consumer.
+
+        This method should return the address of the consumer, which is used to send
+        messages to the consumer.
+        """
+
+
+class SendAddress:
+    def __init__(self, address: str | "Consumer"):
+        self.address = address
+    
+    def resolve(self, routing: ConsumerAddressResolver) -> str:
+        if isinstance(self.address, str):
+            return self.address
+        if isinstance(self.address, Consumer):
+            return routing.resolve_address(self.address)
+        raise AssertionError("Unmatched address type")
 
 
 class Consumer(Protocol[TMsg]):
