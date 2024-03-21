@@ -3,7 +3,7 @@ import functools
 from dependency_injector import containers, providers
 
 from examples.aws_lambda_entrypoint.consumers import FirstSubscriber, SecondSubscriber
-from pyvelope.abstractions.message_bus import Consumer
+from pyvelope._pyvelope.abstractions.message_bus import Consumer
 from pyvelope.simple import MessageDispatcher
 
 
@@ -15,7 +15,6 @@ class UnknownConsumerTypeError(Exception):
 def get_consumer_from_service_provider(
     service_provider: "ServiceProvider", consumer_type: type[Consumer]
 ) -> Consumer:
-    # !! fix `()`
     if consumer_type == FirstSubscriber:
         return service_provider().first_subscriber()
     if consumer_type == SecondSubscriber:

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from pyvelope._pyvelope.abstractions.message_bus import Consumer, MessageBus
+from pyvelope._pyvelope.abstractions.message_bus import Consumer, MessageBus, SendAddress
 from pyvelope._pyvelope.abstractions.messages import Envelope
 
 @dataclass

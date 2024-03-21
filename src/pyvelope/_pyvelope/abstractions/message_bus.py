@@ -49,3 +49,16 @@ class MessageBus(Protocol):
         Exactly one matched AddressPoint is expected, thus when the automatic address resolution founds none,
         or more than one consumer for the message type an error is raised.
         """
+
+
+class QueueRouter(ConsumerAddressResolver):
+    def bind_msg_type(self, msg_type: type[object], queue_name: str | None = None) -> None:
+        """Bind a message type.
+        
+        queue_name is optional, when not given the router will use a default queue name (or generate one).
+        """
+
+    def bind_consumer(self, consumer_type: type[Consumer[TMsg]]) -> None:
+        """Bind a consumer to the router."""
+
+        
