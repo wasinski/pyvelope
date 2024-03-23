@@ -22,3 +22,17 @@ class SqsTransport(QueueRouter):
 
         Method can be used when a consumer is not part of the same codebase as the producer.
         """
+
+    def resolve_consumer_address(self, consumer: "Consumer") -> str | None:
+        """Resolve the address of the consumer.
+
+        This method should return the address of the consumer, which is used to send
+        messages to the consumer.
+        """
+    
+    def resolve_message_address(self, message: object) -> str | None:
+        """Resolve the address of the message.
+
+        This method should return the address of the message, which is used to send
+        messages to the consumer.
+        """
