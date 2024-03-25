@@ -6,18 +6,20 @@ from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
 class SqsTransport(QueueRouter):
     def __init__(self, sqs_client) -> None:
         self.sqs_client = sqs_client
-    
+
     def send(self, message: object, context: object | None = None) -> None:
         ...
-        self.sqs_client.send_message(response = sqs_client.send_message(
-            QueueUrl=queue_url,
-            MessageBody=message_body,
-            MessageGroupId=message_group_id,
-            MessageDeduplicationId=message_deduplication_id,
-            MessageAttributes=message_attributes,
-            MessageSystemAttributes=message_system_attributes,
-            DelaySeconds=delay_seconds,
-        ))
+        self.sqs_client.send_message(
+            response=sqs_client.send_message(
+                QueueUrl=queue_url,
+                MessageBody=message_body,
+                MessageGroupId=message_group_id,
+                MessageDeduplicationId=message_deduplication_id,
+                MessageAttributes=message_attributes,
+                MessageSystemAttributes=message_system_attributes,
+                DelaySeconds=delay_seconds,
+            )
+        )
 
     def bind_consumer(self, consumer_type: type[Consumer]) -> None:
         """Bind a consumer to the transport.
@@ -44,7 +46,7 @@ class SqsTransport(QueueRouter):
         This method should return the address of the consumer, which is used to send
         messages to the consumer.
         """
-    
+
     def resolve_message_address(self, message: object) -> str | None:
         """Resolve the address of the message.
 

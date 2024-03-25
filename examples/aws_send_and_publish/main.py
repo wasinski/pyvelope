@@ -5,6 +5,7 @@ from pyvelope._pyvelope.abstractions.messages import Envelope
 from pyvelope._pyvelope.implementations.eventbridge.transport import EventbridgeTransport
 from pyvelope._pyvelope.implementations.sqs.transport import SqsTransport
 
+
 @dataclass
 class MyEvent:
     body: str
@@ -39,15 +40,17 @@ if __name__ == "__main__":
     # sqs_transport.bind_msg_type(MyCommand)
     # sqs_transport.bind_msg_type(MyEvent, queue_name="special-my-event-queue")
 
-    eventbridge_transport = EventbridgeTransport(eventbridge_client, default_bus="default_bus")
+    eventbridge_transport = EventbridgeTransport(
+        eventbridge_client, default_bus="default_bus"
+    )
     eventbridge_transport.bind_msg_type(MyEvent)
 
     # message_bus.add_transport(sqs_transport)
-    # message_bus.add_transport(eventbridge_transport)
+    message_bus.add_transport(eventbridge_transport)
 
     message_bus.publish(MyEvent("Hello, World!"))
     assert eventbridge_client.put_events.call_count == 1
-    assert sqs_client.send_message.call_count == 1
+    # assert sqs_client.send_message.call_count == 1
 
     # !! na za chwilę
     # message_bus.send(MyCommand("Hello, you!"))

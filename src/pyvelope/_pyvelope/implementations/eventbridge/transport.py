@@ -1,26 +1,39 @@
-from pyvelope._pyvelope.abstractions.message_bus import Consumer, TMsg, Transport
+from collections import defaultdict
+from pyvelope._pyvelope.abstractions.message_bus import Consumer, TMsg
+from pyvelope._pyvelope.abstractions.messages import Envelope
+from pyvelope.envelope import EnvelopeRecord
+import json
+
+from dataclasses import asdict
 
 
-class EventbridgeTransport(Transport):
+json_serializer = json
 
+
+DEFAULT_BUS = object()
+
+
+class EventbridgeTransport:
     def __init__(self, eventbridge_client, default_bus: str) -> None:
         self.eventbridge_client = eventbridge_client
         self.default_bus = default_bus
         self.source = "pyvelope"  # !!
+        self.bound = defaultdict(list)  # !!
 
     def bind_msg_type(self, msg_type: type[object]) -> None:
-        pass
+        self.bound[msg_type.__name__].append(DEFAULT_BUS)
 
     def bind_consumer(self, consumer_type: type[Consumer[TMsg]]) -> None:
-        pass
+        msg_type = consumer_type.__args__[0]  # !! to be fixed
+        self.bound[msg_type.__name__].append(DEFAULT_BUS)
 
     def is_subscribed_to(self, message: object) -> bool:
-        pass
+        return message.__class__.__name__ in self.bound
 
     def send(self, message: object, context: object | None = None) -> None:
         # wrap message in envelope
         envelope = self.wrap_message(message, context)
-        envelope_serialized = json_serializer.dumps(envelope)
+        envelope_serialized = json_serializer.dumps(asdict(envelope))
         self.eventbridge_client.put_events(
             Entries=[
                 {
@@ -31,3 +44,6 @@ class EventbridgeTransport(Transport):
                 }
             ]
         )
+
+    def wrap_message(self, message: object, context: object | None = None) -> Envelope:
+        return EnvelopeRecord(message_type=type(message).__name__, message=message)

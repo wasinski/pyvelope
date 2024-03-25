@@ -6,8 +6,12 @@ from pyvelope._pyvelope.abstractions.messages import Envelope
 TMsg = TypeVar("TMsg")
 
 
+class Consumer(Protocol[TMsg]):
+    def consume(self, envelope: Envelope[TMsg]) -> None: ...
+
+
 class ConsumerAddressResolver(Protocol):
-    def resolve_address(self, consumer: "Consumer") -> str:
+    def resolve_address(self, consumer: Consumer) -> str:
         """Resolve the address of the consumer.
 
         This method should return the address of the consumer, which is used to send
@@ -16,9 +20,9 @@ class ConsumerAddressResolver(Protocol):
 
 
 class SendAddress:
-    def __init__(self, address: str | "Consumer"):
+    def __init__(self, address: str | Consumer):
         self.address = address
-    
+
     def resolve(self, routing: ConsumerAddressResolver) -> str:
         if isinstance(self.address, str):
             return self.address
@@ -52,13 +56,13 @@ class MessageBus(Protocol):
 
 
 class QueueRouter(ConsumerAddressResolver):
-    def bind_msg_type(self, msg_type: type[object], queue_name: str | None = None) -> None:
+    def bind_msg_type(
+        self, msg_type: type[object], queue_name: str | None = None
+    ) -> None:
         """Bind a message type.
-        
+
         queue_name is optional, when not given the router will use a default queue name (or generate one).
         """
 
     def bind_consumer(self, consumer_type: type[Consumer[TMsg]]) -> None:
         """Bind a consumer to the router."""
-
-        
