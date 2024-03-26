@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import Protocol
 
 from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
@@ -6,6 +7,8 @@ from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
 class SqsTransport(QueueRouter):
     def __init__(self, sqs_client) -> None:
         self.sqs_client = sqs_client
+        self.source = "pyvelope"  # !!
+        self.bound = defaultdict(list)  # !!
 
     def send(self, message: object, context: object | None = None) -> None:
         ...
@@ -30,8 +33,12 @@ class SqsTransport(QueueRouter):
         Method can be used when a consumer is part of the same codebase as the producer,
         thus can be directly referenced.
         """
+        msg_type = consumer_type.__args__[0]
+        consumer_name = msg_type.__name__
+        self.bound[consumer_name].append(consumer_name)
 
-    def bind_msg_type(self, msg_type: type[object]) -> None:
+
+    def bind_msg_type(self, msg_type: type[object], queue_name: str | None = None) -> None:
         """Bind a message type to this transport.
 
         This means that this transport will be used to deliver messages of this type to
@@ -39,6 +46,8 @@ class SqsTransport(QueueRouter):
 
         Method can be used when a consumer is not part of the same codebase as the producer.
         """
+        queue_name = queue_name or msg_type.__name__
+        self.bound[msg_type.__name__].append(queue_name)
 
     def resolve_consumer_address(self, consumer: "Consumer") -> str | None:
         """Resolve the address of the consumer.
