@@ -13,12 +13,10 @@ class MessageBus(IMessageBus):
         self._transports.append(transport)
 
     def publish(self, message: object) -> None:
-        breakpoint()
         for transport in self._transports:
             if transport.is_subscribed_to(message):
                 transport.send(message, self.context)
 
-    # for later
     def send(self, message: object, address: SendAddress | None = None) -> None:
         if address:
             for transport in self._transports:
