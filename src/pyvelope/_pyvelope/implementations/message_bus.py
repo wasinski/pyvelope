@@ -21,12 +21,15 @@ class MessageBus(IMessageBus):
         if address:
             for transport in self._transports:
                 if transport.supports_address(address):
+                    # ? should we pass the address to the transport?
+                    # if so then maybe signature should be changed?
+                    # and routing should be made differently, on a separate api?
                     transport.send(message, self.context)
                     return
             raise AssertionError(f"Address {address} not supported by any transport")
 
         for transport in self._transports:
-            if transport.has_matching_consumer(message):
+            if transport.is_subscribed_to(message):
                 transport.send(message, self.context)
                 # ? if many consumers found, then maybe raise an exception?
                 return

@@ -21,6 +21,11 @@ def get_consumer_envelope_wrapped_type(func):
     return None
 
 
+class SqsQueueUrl:
+    def __init__(self, url: str) -> None:
+        self.url = url
+
+
 class SqsTransport(QueueRouter):
     def __init__(self, sqs_client) -> None:
         self.sqs_client = sqs_client
@@ -84,6 +89,10 @@ class SqsTransport(QueueRouter):
         This method should return the address of the message, which is used to send
         messages to the consumer.
         """
+
+    def supports_address(self, address: SqsQueueUrl) -> bool:
+        if isinstance(address, SqsQueueUrl):
+            return True
 
     def wrap_message(self, message: object, context: object | None = None) -> Envelope:
         return EnvelopeRecord(message_type=type(message).__name__, message=message)
