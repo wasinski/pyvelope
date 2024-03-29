@@ -1,6 +1,6 @@
 from typing import Protocol, TypeVar
 
-from pyvelope._pyvelope.abstractions.messages import Envelope
+from pyvelope._pyvelope.abstractions.messages import Envelope, SendAddress
 
 
 TMsg = TypeVar("TMsg")
@@ -20,15 +20,7 @@ class ConsumerAddressResolver(Protocol):
 
 
 class SendAddress:
-    def __init__(self, address: str | Consumer):
-        self.address = address
-
-    def resolve(self, routing: ConsumerAddressResolver) -> str:
-        if isinstance(self.address, str):
-            return self.address
-        if isinstance(self.address, Consumer):
-            return routing.resolve_address(self.address)
-        raise AssertionError("Unmatched address type")
+    pass
 
 
 class Consumer(Protocol[TMsg]):

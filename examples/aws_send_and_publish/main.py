@@ -4,6 +4,7 @@ from pyvelope._pyvelope.abstractions.message_bus import Consumer, MessageBus, Se
 from pyvelope._pyvelope.abstractions.messages import Envelope
 from pyvelope._pyvelope.implementations.eventbridge.transport import EventbridgeTransport
 from pyvelope._pyvelope.implementations.sqs.transport import SqsQueueUrl, SqsTransport
+from pyvelope.envelope import EnvelopeRecord
 
 
 @dataclass
@@ -64,8 +65,8 @@ if __name__ == "__main__":
     assert sqs_client.send_message.call_count == 4
 
     # fake an incoming message and send a reply, faking is needed to have it working without a "real" message bus
-    received_message = Envelope(
-        MyCommand("Hello, you!"), sender=SqsQueueUrl(EXAMPLE_SQS_QUEUE_URL)
+    received_message = EnvelopeRecord(
+        "MyCommand", "Hello, you!", sender=SqsQueueUrl(EXAMPLE_SQS_QUEUE_URL)
     )
     message_bus.send(
         {"body": "Hi! Got your message"}, address=received_message.reply_address()

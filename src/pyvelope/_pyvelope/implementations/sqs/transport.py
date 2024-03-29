@@ -3,7 +3,7 @@ from dataclasses import asdict
 from typing import Protocol, get_type_hints
 import json
 
-from pyvelope._pyvelope.abstractions.messages import Envelope
+from pyvelope._pyvelope.abstractions.messages import Envelope, SendAddress
 from pyvelope.envelope import EnvelopeRecord
 from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
 
@@ -21,7 +21,7 @@ def get_consumer_envelope_wrapped_type(func):
     return None
 
 
-class SqsQueueUrl:
+class SqsQueueUrl(SendAddress):
     def __init__(self, url: str) -> None:
         self.url = url
 
@@ -35,7 +35,7 @@ class SqsTransport(QueueRouter):
     def send(self, message: object, context: object | None = None) -> None:
         queue_url = "default_queue_url"  # !! to be fixed, taken from params or consumer
         envelope = self.wrap_message(message, context)
-        envelope_serialized = json_serializer.dumps(asdict(envelope))
+        envelope_serialized = json_serializer.dumps(asdict(envelope), default=str)  # !!
 
         self.sqs_client.send_message(
             QueueUrl=queue_url,
@@ -95,4 +95,8 @@ class SqsTransport(QueueRouter):
             return True
 
     def wrap_message(self, message: object, context: object | None = None) -> Envelope:
-        return EnvelopeRecord(message_type=type(message).__name__, message=message)
+        return EnvelopeRecord(
+            message_type=type(message).__name__,
+            message=message,
+            sender=SqsQueueUrl("to-be-fixed"),
+        )  # !!

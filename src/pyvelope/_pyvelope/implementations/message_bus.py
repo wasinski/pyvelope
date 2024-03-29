@@ -1,7 +1,8 @@
 from pyvelope._pyvelope.abstractions.message_bus import (
+    Consumer,
     MessageBus as IMessageBus,
-    SendAddress,
 )
+from pyvelope._pyvelope.abstractions.messages import SendAddress
 
 
 class MessageBus(IMessageBus):
@@ -17,8 +18,10 @@ class MessageBus(IMessageBus):
             if transport.is_subscribed_to(message):
                 transport.send(message, self.context)
 
-    def send(self, message: object, address: SendAddress | None = None) -> None:
-        if address:
+    def send(
+        self, message: object, address: SendAddress | Consumer | None = None
+    ) -> None:
+        if address and isinstance(address, SendAddress):
             for transport in self._transports:
                 if transport.supports_address(address):
                     # ? should we pass the address to the transport?

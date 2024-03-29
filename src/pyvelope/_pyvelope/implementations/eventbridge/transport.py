@@ -1,5 +1,5 @@
 from collections import defaultdict
-from pyvelope._pyvelope.abstractions.message_bus import Consumer, TMsg
+from pyvelope._pyvelope.abstractions.message_bus import Consumer, SendAddress, TMsg
 from pyvelope._pyvelope.abstractions.messages import Envelope
 from pyvelope.envelope import EnvelopeRecord
 import json
@@ -46,4 +46,12 @@ class EventbridgeTransport:
         )
 
     def wrap_message(self, message: object, context: object | None = None) -> Envelope:
-        return EnvelopeRecord(message_type=type(message).__name__, message=message)
+        # ?? sender in general needs some rethinking...
+        # maybe it's better to have an explicit "respond_to" field?
+        # but that might not work in all contexts
+        return EnvelopeRecord(
+            message_type=type(message).__name__, message=message, sender="invalid"
+        )  # !!
+
+    def supports_address(self, address: SendAddress) -> bool:
+        return False
