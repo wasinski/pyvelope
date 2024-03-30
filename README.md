@@ -21,4 +21,4 @@ We'll see what brokers, databases and platforms we can support for easy integrat
 
 ## Current progress
 
-Right now the focus is on establishing some sensible interfaces for this library
+Basic APIs both for producer and consumer sides were established and can be looked up in `examples/`. For now the main focus will be to implement them for AWS cloud platforms, mainly SQS, Eventbridge and Lambda runtime.
