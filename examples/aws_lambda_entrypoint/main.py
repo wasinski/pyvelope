@@ -30,18 +30,17 @@ def lambda_entrypoint(event, _context, service_provider=None) -> object | None:
     message_dispatcher.dispatch(message)
 
 
-if __name__ == "__main__":
-    # setup globals
-    service_provider = None
+# setup globals
+service_provider = None
 
-    # configure the message dispatcher - it's a singleton
-    message_dispatcher = get_service_provider().message_dispatcher()
-    message_dispatcher.register_consumer(FirstSubscriber)
-    message_dispatcher.register_consumer(SecondSubscriber)
+# configure the message dispatcher - it's a singleton
+message_dispatcher = get_service_provider().message_dispatcher()
+message_dispatcher.register_consumer(FirstSubscriber)
+message_dispatcher.register_consumer(SecondSubscriber)
 
-    # handle the event
-    lambda_entrypoint(eventbridge_event_factory(), {})
+# handle the event
+lambda_entrypoint(eventbridge_event_factory(), {})
 
-    # assert the consumers were called
-    assert assert_state.consumer_1_called
-    assert assert_state.consumer_2_called
+# assert the consumers were called
+assert assert_state.consumer_1_called
+assert assert_state.consumer_2_called
