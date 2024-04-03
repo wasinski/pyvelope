@@ -13,5 +13,7 @@ def eventbridge_event_factory() -> dict[str, object]:
             "type": "MyEvent",
             "correlation_id": "d734b3e3-5b0b-4c6c-9b69-2d0d3f3e3e3e",
             "message": {"body": "Hello, World!"},
+            "sender": "com.example.myapp",
+            "response_address": "https://sqs.us-east-1.amazonaws.com/123456789012/my_queue",
         },
     }

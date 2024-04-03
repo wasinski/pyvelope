@@ -20,6 +20,8 @@ def envelope_from_eventbridge(event: dict) -> Envelope[object]:
     return EnvelopeRecord(
         message_type=event["detail-type"],
         message=event["detail"]["message"],
+        sender=event["detail"]["sender"],
+        response_address=event["detail"]["response_address"],
     )
 
 

@@ -1,6 +1,6 @@
 from typing import Protocol, TypeVar
 
-from pyvelope._pyvelope.abstractions.messages import Envelope, SendAddress
+from pyvelope._pyvelope.abstractions.messages import Envelope, Address
 
 
 TMsg = TypeVar("TMsg")
@@ -19,7 +19,7 @@ class ConsumerAddressResolver(Protocol):
         """
 
 
-class SendAddress:
+class Address:
     pass
 
 
@@ -35,7 +35,7 @@ class MessageBus(Protocol):
         to this message type.
         """
 
-    def send(self, message: TMsg, address: SendAddress | None = None) -> None:
+    def send(self, message: TMsg, address: Address | None = None) -> None:
         """Send a message to a specific address.
 
         If the address is None the MessageBus will try to resolve it from the message type.

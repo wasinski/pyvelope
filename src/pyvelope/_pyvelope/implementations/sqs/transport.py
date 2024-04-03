@@ -3,7 +3,7 @@ from dataclasses import asdict
 from typing import Protocol, get_type_hints
 import json
 
-from pyvelope._pyvelope.abstractions.messages import Envelope, SendAddress
+from pyvelope._pyvelope.abstractions.messages import Envelope, Address
 from pyvelope.envelope import EnvelopeRecord
 from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
 
@@ -21,7 +21,7 @@ def get_consumer_envelope_wrapped_type(func):
     return None
 
 
-class SqsQueueUrl(SendAddress):
+class SqsQueueUrl(Address):
     def __init__(self, url: str) -> None:
         self.url = url
 

@@ -1,5 +1,5 @@
 from collections import defaultdict
-from pyvelope._pyvelope.abstractions.message_bus import Consumer, SendAddress, TMsg
+from pyvelope._pyvelope.abstractions.message_bus import Consumer, Address, TMsg
 from pyvelope._pyvelope.abstractions.messages import Envelope
 from pyvelope.envelope import EnvelopeRecord
 import json
@@ -53,5 +53,5 @@ class EventbridgeTransport:
             message_type=type(message).__name__, message=message, sender="invalid"
         )  # !!
 
-    def supports_address(self, address: SendAddress) -> bool:
+    def supports_address(self, address: Address) -> bool:
         return False
