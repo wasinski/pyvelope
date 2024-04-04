@@ -27,6 +27,11 @@ class Consumer(Protocol[TMsg]):
     def consume(self, envelope: Envelope[TMsg]) -> None: ...
 
 
+AutoRecipient = type("AutoRecipient", (), {})
+AUTO_RECIPIENT = AutoRecipient()
+Recipient = Address | Consumer
+
+
 class MessageBus(Protocol):
     def publish(self, message: TMsg) -> None:
         """Publish a message to the message bus.
@@ -35,15 +40,17 @@ class MessageBus(Protocol):
         to this message type.
         """
 
-    def send(self, message: TMsg, address: Address | None = None) -> None:
-        """Send a message to a specific address.
+    def send(
+        self, message: TMsg, recipient: Recipient | AutoRecipient = AUTO_RECIPIENT
+    ) -> None:
+        """Send a message to a single Recipient.
 
-        If the address is None the MessageBus will try to resolve it from the message type.
+        If the recipient is AUTO_RECIPIENT the MessageBus will try to resolve it from the message type (or raise).
         This means that you could have many consumers for the same message type, but .send
         method should be used when you want to send a message to a specific consumer.
 
-        Exactly one matched AddressPoint is expected, thus when the automatic address resolution founds none,
-        or more than one consumer for the message type an error is raised.
+        When making automatic recipient resolution finding exactly one address is expected, thus if none,
+        or more than one address if found for the message type an error is raised.
         """
 
 
