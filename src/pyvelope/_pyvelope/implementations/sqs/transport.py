@@ -1,10 +1,9 @@
 from collections import defaultdict
-from dataclasses import asdict
+from attrs import asdict
 from typing import Protocol, get_type_hints
 import json
 
 from pyvelope._pyvelope.abstractions.messages import Envelope, Address
-from pyvelope.envelope import EnvelopeRecord
 from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
 
 
@@ -95,8 +94,8 @@ class SqsTransport(QueueRouter):
             return True
 
     def wrap_message(self, message: object, context: object | None = None) -> Envelope:
-        return EnvelopeRecord(
+        return Envelope(
             message_type=type(message).__name__,
             message=message,
             sender=SqsQueueUrl("to-be-fixed"),
-        )  # !!
+        )

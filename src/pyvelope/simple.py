@@ -1,6 +1,6 @@
 from collections import defaultdict
 from collections.abc import Callable
-from dataclasses import replace
+from attrs import evolve
 from typing import get_type_hints
 
 from pyvelope._pyvelope.abstractions.message_bus import Consumer
@@ -18,7 +18,7 @@ def get_consumer_envelope_wrapped_type(func):
 
 
 def serialize(envelope: Envelope[object], msg_type: type[object]) -> Envelope[object]:
-    return replace(envelope, message=msg_type(**envelope.message))
+    return evolve(envelope, message=msg_type(**envelope.message))
 
 
 # simple, poorly implemented, just to showcase the concept

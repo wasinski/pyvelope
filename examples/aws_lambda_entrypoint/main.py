@@ -6,7 +6,6 @@ from examples.aws_lambda_entrypoint.consumers import (
 from examples.aws_lambda_entrypoint.di import ServiceProvider
 from examples.aws_lambda_entrypoint.utils import eventbridge_event_factory
 from pyvelope._pyvelope.abstractions.messages import Envelope
-from pyvelope.envelope import EnvelopeRecord
 
 
 def get_service_provider() -> ServiceProvider:
@@ -17,7 +16,7 @@ def get_service_provider() -> ServiceProvider:
 
 
 def envelope_from_eventbridge(event: dict) -> Envelope[object]:
-    return EnvelopeRecord(
+    return Envelope(
         message_type=event["detail-type"],
         message=event["detail"]["message"],
         sender=event["detail"]["sender"],
