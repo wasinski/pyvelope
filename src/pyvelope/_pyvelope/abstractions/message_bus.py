@@ -1,4 +1,4 @@
-from typing import Protocol, TypeVar
+from typing import NewType, Protocol, TypeVar
 
 from pyvelope._pyvelope.abstractions.messages import Envelope, Address
 
@@ -11,7 +11,7 @@ class Consumer(Protocol[TMsg]):
 
 
 class ConsumerAddressResolver(Protocol):
-    def resolve_address(self, consumer: Consumer) -> str:
+    def resolve_address(self, consumer: Consumer[TMsg]) -> str:
         """Resolve the address of the consumer.
 
         This method should return the address of the consumer, which is used to send
@@ -19,17 +19,9 @@ class ConsumerAddressResolver(Protocol):
         """
 
 
-class Address:
-    pass
-
-
-class Consumer(Protocol[TMsg]):
-    def consume(self, envelope: Envelope[TMsg]) -> None: ...
-
-
-AutoRecipient = type("AutoRecipient", (), {})
-AUTO_RECIPIENT = AutoRecipient()
-Recipient = Address | Consumer
+AutoRecipient = NewType("AutoRecipient", object)
+AUTO_RECIPIENT = AutoRecipient(object())
+Recipient = Address | Consumer[TMsg]
 
 
 class MessageBus(Protocol):
