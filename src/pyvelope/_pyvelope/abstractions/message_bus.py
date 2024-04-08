@@ -33,7 +33,7 @@ class MessageBus(Protocol):
         """
 
     def send(
-        self, message: TMsg, recipient: Recipient | AutoRecipient = AUTO_RECIPIENT
+        self, message: TMsg, recipient: Recipient[TMsg] | AutoRecipient = AUTO_RECIPIENT
     ) -> None:
         """Send a message to a single Recipient.
 
