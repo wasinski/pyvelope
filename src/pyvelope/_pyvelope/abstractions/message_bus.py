@@ -1,9 +1,6 @@
 from typing import NewType, Protocol, TypeVar
 
-from pyvelope._pyvelope.abstractions.messages import Envelope, Address
-
-
-TMsg = TypeVar("TMsg")
+from pyvelope._pyvelope.abstractions.messages import Envelope, Address, TMsg
 
 
 class Consumer(Protocol[TMsg]):

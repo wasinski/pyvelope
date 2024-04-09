@@ -6,7 +6,7 @@ from pyvelope._pyvelope.abstractions.messages import Address
 
 
 class MessageBus(IMessageBus):
-    def __init__(self):
+    def __init__(self) -> None:
         self._transports = []
         self.context = None
 

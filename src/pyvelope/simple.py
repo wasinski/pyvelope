@@ -3,21 +3,21 @@ from collections.abc import Callable
 from attrs import evolve
 from typing import get_type_hints
 
-from pyvelope._pyvelope.abstractions.message_bus import Consumer, TMsg
-from pyvelope._pyvelope.abstractions.messages import Envelope
+from pyvelope._pyvelope.abstractions.message_bus import Consumer
+from pyvelope._pyvelope.abstractions.messages import Envelope, TMsg
 
 
-def get_consumer_envelope_wrapped_type(func: Callable[[Envelope[TMsg]], None]) -> type[TMsg] | None:
+def get_consumer_envelope_wrapped_type(func: Callable[[Consumer[TMsg], Envelope[TMsg]], None]) -> type[TMsg]:
     """Get the type of the message wrapped in the Envelope from the Consumer's
     .consume method signature."""
     hints = get_type_hints(func)
     param_type = hints["msg"]
     if hasattr(param_type, "__args__"):
         return param_type.__args__[0]
-    return None
+    raise ValueError("Consumer must have a message type")
 
 
-def serialize(envelope: Envelope[object], msg_type: type[object]) -> Envelope[object]:
+def serialize(envelope: Envelope[TMsg], msg_type: TMsg) -> Envelope[TMsg]:
     return evolve(envelope, message=msg_type(**envelope.message))
 
 
@@ -25,14 +25,13 @@ def serialize(envelope: Envelope[object], msg_type: type[object]) -> Envelope[ob
 class MessageDispatcher:
     def __init__(self, consumer_provider: Callable[[type[Consumer[TMsg]]], Consumer[TMsg]]):
         self.consumer_provider = consumer_provider
-        self.consumers: dict[str, list[Consumer[TMsg]]] = defaultdict(list)
+        self.consumers: dict[str, list[type[Consumer[TMsg]]]] = defaultdict(list)
 
     def register_consumer(self, consumer_type: type[Consumer[TMsg]]) -> None:
-        key = get_consumer_envelope_wrapped_type(consumer_type.consume).__name__
-        assert key is not None, "Consumer must have a message type"
-        self.consumers[key].append(consumer_type)
+        key = get_consumer_envelope_wrapped_type(consumer_type.consume)
+        self.consumers[key.__name__].append(consumer_type)
 
-    def dispatch(self, message: Envelope[object]) -> None:
+    def dispatch(self, message: Envelope[TMsg]) -> None:
         print(f"Dispatching message: {message}")
         message_key = message.message_type
         for consumer_type in self.consumers[message_key]:

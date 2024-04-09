@@ -1,6 +1,6 @@
 from collections import defaultdict
-from pyvelope._pyvelope.abstractions.message_bus import Consumer, Address, TMsg
-from pyvelope._pyvelope.abstractions.messages import Envelope
+from pyvelope._pyvelope.abstractions.message_bus import Consumer
+from pyvelope._pyvelope.abstractions.messages import Envelope, Address, TMsg
 import json
 
 from attrs import asdict

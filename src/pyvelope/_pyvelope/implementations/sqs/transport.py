@@ -1,23 +1,23 @@
 from collections import defaultdict
 from attrs import asdict
-from typing import Protocol, get_type_hints
+from typing import Callable, Protocol, get_type_hints
 import json
 
-from pyvelope._pyvelope.abstractions.messages import Envelope, Address
+from pyvelope._pyvelope.abstractions.messages import Envelope, Address, TMsg
 from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
 
 
 json_serializer = json
 
 
-def get_consumer_envelope_wrapped_type(func):
+def get_consumer_envelope_wrapped_type(func: Callable[[Consumer[TMsg], Envelope[TMsg]], None]) -> type[TMsg]:
     """Get the type of the message wrapped in the Envelope from the Consumer's
     .consume method signature."""
     hints = get_type_hints(func)
-    param_type = hints["message"]
+    param_type = hints["msg"]
     if hasattr(param_type, "__args__"):
         return param_type.__args__[0]
-    return None
+    raise ValueError("Consumer must have a message type")
 
 
 class SqsQueueUrl(Address):
