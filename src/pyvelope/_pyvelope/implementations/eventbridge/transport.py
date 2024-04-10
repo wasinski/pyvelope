@@ -44,7 +44,9 @@ class EventbridgeTransport:
             ]
         )
 
-    def wrap_message(self, message: object, context: object | None = None) -> Envelope:
+    def wrap_message(
+        self, message: TMsg, context: object | None = None
+    ) -> Envelope[TMsg]:
         # ?? sender in general needs some rethinking...
         # maybe it's better to have an explicit "respond_to" field?
         # but that might not work in all contexts

@@ -5,19 +5,10 @@ import json
 
 from pyvelope._pyvelope.abstractions.messages import Envelope, Address, TMsg
 from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
+from pyvelope.simple import get_consumer_envelope_wrapped_type
 
 
 json_serializer = json
-
-
-def get_consumer_envelope_wrapped_type(func: Callable[[Consumer[TMsg], Envelope[TMsg]], None]) -> type[TMsg]:
-    """Get the type of the message wrapped in the Envelope from the Consumer's
-    .consume method signature."""
-    hints = get_type_hints(func)
-    param_type = hints["msg"]
-    if hasattr(param_type, "__args__"):
-        return param_type.__args__[0]
-    raise ValueError("Consumer must have a message type")
 
 
 class SqsQueueUrl(Address):
@@ -49,7 +40,7 @@ class SqsTransport(QueueRouter):
     def is_subscribed_to(self, message: object) -> bool:
         return message.__class__.__name__ in self.bound
 
-    def bind_consumer(self, consumer_type: type[Consumer]) -> None:
+    def bind_consumer(self, consumer_type: type[Consumer[TMsg]]) -> None:
         """Bind a consumer to the transport.
 
         This means that this transport will be used to deliver messages to this consumer,
@@ -75,14 +66,14 @@ class SqsTransport(QueueRouter):
         queue_name = queue_name or msg_type.__name__
         self.bound[msg_type.__name__].append(queue_name)
 
-    def resolve_consumer_address(self, consumer: "Consumer") -> str | None:
+    def resolve_consumer_address(self, consumer: "Consumer[TMsg]") -> str | None:
         """Resolve the address of the consumer.
 
         This method should return the address of the consumer, which is used to send
         messages to the consumer.
         """
 
-    def resolve_message_address(self, message: object) -> str | None:
+    def resolve_message_address(self, message: TMsg) -> str | None:
         """Resolve the address of the message.
 
         This method should return the address of the message, which is used to send
@@ -93,7 +84,9 @@ class SqsTransport(QueueRouter):
         if isinstance(address, SqsQueueUrl):
             return True
 
-    def wrap_message(self, message: object, context: object | None = None) -> Envelope:
+    def wrap_message(
+        self, message: TMsg, context: object | None = None
+    ) -> Envelope[TMsg]:
         return Envelope(
             message_type=type(message).__name__,
             message=message,
