@@ -1,6 +1,10 @@
-from typing import NewType, Protocol, TypeVar
+from typing import Generic, NewType, Protocol, TypeVar
 
 from pyvelope._pyvelope.abstractions.messages import Envelope, Address, TMsg
+
+
+
+TMsg_Ct = TypeVar("TMsg_Ct", contravariant=True)
 
 
 class Consumer(Protocol[TMsg]):
@@ -21,14 +25,7 @@ AUTO_RECIPIENT = AutoRecipient(object())
 Recipient = Address | Consumer[TMsg]
 
 
-class MessageBus(Protocol):
-    def publish(self, message: TMsg) -> None:
-        """Publish a message to the message bus.
-
-        Message will be delivered in a PubSub manner to all consumers that are subscribed
-        to this message type.
-        """
-
+class Sender(Protocol[TMsg]):
     def send(
         self, message: TMsg, recipient: Recipient[TMsg] | AutoRecipient = AUTO_RECIPIENT
     ) -> None:
@@ -43,10 +40,20 @@ class MessageBus(Protocol):
         """
 
 
+class Publisher(Protocol[TMsg_Ct]):
+    def publish(self, message: TMsg_Ct) -> None:
+        """Publish a message to the message bus.
+
+        Message will be delivered in a PubSub manner to all consumers that are subscribed
+        to this message type.
+        """
+
+
+class MessageBus(Sender[TMsg], Publisher[TMsg], Protocol): ...
+
+
 class QueueRouter(ConsumerAddressResolver):
-    def bind_msg_type(
-        self, msg_type: type[object], queue_name: str | None = None
-    ) -> None:
+    def bind_msg_type(self, msg_type: type[TMsg], queue_name: str | None = None) -> None:
         """Bind a message type.
 
         queue_name is optional, when not given the router will use a default queue name (or generate one).
@@ -54,3 +61,6 @@ class QueueRouter(ConsumerAddressResolver):
 
     def bind_consumer(self, consumer_type: type[Consumer[TMsg]]) -> None:
         """Bind a consumer to the router."""
+
+
+class Transport(Sender[TMsg], Publisher[TMsg], QueueRouter): ...
