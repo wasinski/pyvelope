@@ -17,7 +17,7 @@ class EventbridgeTransport:
         self.eventbridge_client = eventbridge_client
         self.default_bus = default_bus
         self.source = "pyvelope"  # !!
-        self.bound = defaultdict(list)  # !!
+        self.bound: dict[str, list[str]] = defaultdict(list)  # !!
 
     def bind_msg_type(self, msg_type: type[object]) -> None:
         self.bound[msg_type.__name__].append(DEFAULT_BUS)

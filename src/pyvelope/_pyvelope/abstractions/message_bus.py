@@ -3,7 +3,6 @@ from typing import Generic, NewType, Protocol, TypeVar
 from pyvelope._pyvelope.abstractions.messages import Envelope, Address, TMsg
 
 
-
 TMsg_Ct = TypeVar("TMsg_Ct", contravariant=True)
 
 
@@ -52,7 +51,7 @@ class Publisher(Protocol[TMsg_Ct]):
 class MessageBus(Sender[TMsg], Publisher[TMsg], Protocol): ...
 
 
-class QueueRouter(ConsumerAddressResolver):
+class QueueRouter(ConsumerAddressResolver, Protocol):
     def bind_msg_type(self, msg_type: type[TMsg], queue_name: str | None = None) -> None:
         """Bind a message type.
 
@@ -62,5 +61,14 @@ class QueueRouter(ConsumerAddressResolver):
     def bind_consumer(self, consumer_type: type[Consumer[TMsg]]) -> None:
         """Bind a consumer to the router."""
 
+    def supports_address(self, address: Address) -> bool: ...
 
-class Transport(Sender[TMsg], Publisher[TMsg], QueueRouter): ...
+    def is_subscribed_to(self, message: TMsg) -> bool: ...
+
+
+class Transport(QueueRouter, Protocol):
+    def send(self, message: TMsg, context: object | None = None) -> None: ...
+
+    def wrap_message(
+        self, message: TMsg, context: object | None = None
+    ) -> Envelope[TMsg]: ...
