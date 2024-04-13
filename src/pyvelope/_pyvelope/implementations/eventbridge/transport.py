@@ -12,6 +12,11 @@ json_serializer = json
 DEFAULT_BUS = object()
 
 
+class EventbridgeBusArn(Address):
+    def __init__(self, arn: str) -> None:
+        self.arn = arn
+
+
 class EventbridgeTransport:
     def __init__(self, eventbridge_client, default_bus: str) -> None:
         self.eventbridge_client = eventbridge_client

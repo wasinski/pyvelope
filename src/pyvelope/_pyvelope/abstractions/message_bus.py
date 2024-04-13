@@ -1,9 +1,12 @@
 from typing import Generic, NewType, Protocol, TypeVar
 
-from pyvelope._pyvelope.abstractions.messages import Envelope, Address, TMsg
+from pyvelope._pyvelope.abstractions.json import Json
+from pyvelope._pyvelope.abstractions.messages import Envelope, Address
 
+SendableMessage = NewType("SendableMessage", object)
 
-TMsg_Ct = TypeVar("TMsg_Ct", contravariant=True)
+TMsg = TypeVar("TMsg")
+TMsg_In = TypeVar("TMsg_In", contravariant=True)
 
 
 class Consumer(Protocol[TMsg]):
@@ -39,8 +42,8 @@ class Sender(Protocol[TMsg]):
         """
 
 
-class Publisher(Protocol[TMsg_Ct]):
-    def publish(self, message: TMsg_Ct) -> None:
+class Publisher(Protocol[TMsg_In]):
+    def publish(self, message: TMsg_In) -> None:
         """Publish a message to the message bus.
 
         Message will be delivered in a PubSub manner to all consumers that are subscribed
