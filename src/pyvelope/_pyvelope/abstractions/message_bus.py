@@ -1,12 +1,11 @@
 from typing import Generic, NewType, Protocol, TypeVar
 
 from pyvelope._pyvelope.abstractions.json import Json
-from pyvelope._pyvelope.abstractions.messages import Envelope, Address
+from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message
 
-SendableMessage = NewType("SendableMessage", object)
 
-TMsg = TypeVar("TMsg")
-TMsg_In = TypeVar("TMsg_In", contravariant=True)
+TMsg = TypeVar("TMsg", Message)
+TMsg_In = TypeVar("TMsg_In", Message, contravariant=True)
 
 
 class Consumer(Protocol[TMsg]):
@@ -14,7 +13,7 @@ class Consumer(Protocol[TMsg]):
 
 
 class ConsumerAddressResolver(Protocol):
-    def resolve_address(self, consumer: Consumer[TMsg]) -> str:
+    def resolve_address(self, consumer: Consumer[Message]) -> str:
         """Resolve the address of the consumer.
 
         This method should return the address of the consumer, which is used to send

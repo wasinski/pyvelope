@@ -1,14 +1,18 @@
 from abc import ABC
-from typing import Generic, Protocol, TypeVar
+from typing import Generic, NewType, Protocol, TypeVar
 
 from attr import define
 
 
-TMsg = TypeVar("TMsg")
-
-
 class Address(ABC):
     pass
+
+
+class Message(ABC):
+    pass
+
+
+TMsg = TypeVar("TMsg", Message)
 
 
 @define
