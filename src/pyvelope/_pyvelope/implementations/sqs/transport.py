@@ -80,7 +80,7 @@ class SqsTransport(QueueRouter):
         messages to the consumer.
         """
 
-    def supports_address(self, address: SqsQueueUrl) -> bool:
+    def supports_address(self, address: Address) -> bool:
         if isinstance(address, SqsQueueUrl):
             return True
 

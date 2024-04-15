@@ -4,8 +4,8 @@ from pyvelope._pyvelope.abstractions.json import Json
 from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message
 
 
-TMsg = TypeVar("TMsg", Message)
-TMsg_In = TypeVar("TMsg_In", Message, contravariant=True)
+TMsg = TypeVar("TMsg", bound=Message)
+TMsg_In = TypeVar("TMsg_In", bound=Message, contravariant=True)
 
 
 class Consumer(Protocol[TMsg]):

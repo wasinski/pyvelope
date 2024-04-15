@@ -12,7 +12,7 @@ class Message(ABC):
     pass
 
 
-TMsg = TypeVar("TMsg", Message)
+TMsg = TypeVar("TMsg", bound=Message)
 
 
 @define
