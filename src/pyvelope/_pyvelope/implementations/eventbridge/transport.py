@@ -1,6 +1,6 @@
 from collections import defaultdict
 from pyvelope._pyvelope.abstractions.message_bus import Consumer
-from pyvelope._pyvelope.abstractions.messages import Envelope, Address, TMsg
+from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message, TMsg
 import json
 
 from attrs import asdict
@@ -31,10 +31,10 @@ class EventbridgeTransport:
         msg_type = consumer_type.__args__[0]  # !! to be fixed
         self.bound[msg_type.__name__].append(DEFAULT_BUS)
 
-    def is_subscribed_to(self, message: object) -> bool:
+    def is_subscribed_to(self, message: Message) -> bool:
         return message.__class__.__name__ in self.bound
 
-    def send(self, message: object, context: object | None = None) -> None:
+    def send(self, message: Message, context: object | None = None) -> None:
         # wrap message in envelope
         envelope = self.wrap_message(message, context)
         envelope_serialized = json_serializer.dumps(asdict(envelope))
@@ -50,8 +50,8 @@ class EventbridgeTransport:
         )
 
     def wrap_message(
-        self, message: TMsg, context: object | None = None
-    ) -> Envelope[TMsg]:
+        self, message: Message, context: object | None = None
+    ) -> Envelope[Message]:
         # ?? sender in general needs some rethinking...
         # maybe it's better to have an explicit "respond_to" field?
         # but that might not work in all contexts

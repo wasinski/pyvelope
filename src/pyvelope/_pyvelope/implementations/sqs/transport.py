@@ -3,7 +3,7 @@ from attrs import asdict
 from typing import Callable, Protocol, get_type_hints
 import json
 
-from pyvelope._pyvelope.abstractions.messages import Envelope, Address, TMsg
+from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message, TMsg
 from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
 from pyvelope.simple import get_consumer_envelope_wrapped_type
 
@@ -22,7 +22,7 @@ class SqsTransport(QueueRouter):
         self.source = "pyvelope"  # !!
         self.bound = defaultdict(list)  # !!
 
-    def send(self, message: object, context: object | None = None) -> None:
+    def send(self, message: Message, context: object | None = None) -> None:
         queue_url = "default_queue_url"  # !! to be fixed, taken from params or consumer
         envelope = self.wrap_message(message, context)
         envelope_serialized = json_serializer.dumps(asdict(envelope), default=str)  # !!
@@ -83,6 +83,7 @@ class SqsTransport(QueueRouter):
     def supports_address(self, address: Address) -> bool:
         if isinstance(address, SqsQueueUrl):
             return True
+        return False
 
     def wrap_message(
         self, message: TMsg, context: object | None = None
