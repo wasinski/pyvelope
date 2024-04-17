@@ -5,6 +5,8 @@ import json
 
 from attrs import asdict
 
+from pyvelope._pyvelope.implementations.sqs.transport import SqsQueueUrl
+
 
 json_serializer = json
 
@@ -56,7 +58,7 @@ class EventbridgeTransport:
         # maybe it's better to have an explicit "respond_to" field?
         # but that might not work in all contexts
         return Envelope(
-            message_type=type(message).__name__, message=message, sender="invalid"
+            message_type=type(message).__name__, message=message, sender=SqsQueueUrl("invalid")
         )
 
     def supports_address(self, address: Address) -> bool:
