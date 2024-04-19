@@ -1,3 +1,4 @@
+from typing import Any
 from examples.aws_lambda_entrypoint.consumers import (
     FirstSubscriber,
     SecondSubscriber,
@@ -15,7 +16,7 @@ def get_service_provider() -> ServiceProvider:
     return service_provider
 
 
-def envelope_from_eventbridge(event: dict) -> Envelope[object]:
+def envelope_from_eventbridge(event: dict[str, Any]) -> Envelope[object]:
     return Envelope(
         message_type=event["detail-type"],
         message=event["detail"]["message"],

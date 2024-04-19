@@ -8,7 +8,7 @@ class Address(ABC):
     pass
 
 
-class Message(ABC):
+class Message(Protocol):
     pass
 
 
@@ -25,3 +25,4 @@ class Envelope(Generic[TMsg]):
     def reply_address(self) -> Address:
         assert self.response_address is not None
         return self.response_address
+
