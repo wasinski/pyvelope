@@ -23,12 +23,13 @@ class ConsumerAddressResolver(Protocol):
 
 AutoRecipient = NewType("AutoRecipient", object)
 AUTO_RECIPIENT = AutoRecipient(object())
-Recipient = Address | Consumer[TMsg]
+Recipient = Address | Consumer[Message]
 
 
-class Sender(Protocol[TMsg]):
+class MessageBus(Protocol): ...
+
     def send(
-        self, message: TMsg, recipient: Recipient[TMsg] | AutoRecipient = AUTO_RECIPIENT
+        self, message: Message, recipient: Recipient[Message] | AutoRecipient = AUTO_RECIPIENT
     ) -> None:
         """Send a message to a single Recipient.
 
@@ -39,22 +40,16 @@ class Sender(Protocol[TMsg]):
         When making automatic recipient resolution finding exactly one address is expected, thus if none,
         or more than one address if found for the message type an error is raised.
         """
-
-
-class Publisher(Protocol[TMsg_In]):
-    def publish(self, message: TMsg_In) -> None:
+        
+    def publish(self, message: Message) -> None:
         """Publish a message to the message bus.
 
         Message will be delivered in a PubSub manner to all consumers that are subscribed
         to this message type.
         """
-
-
-class MessageBus(Sender[TMsg], Publisher[TMsg], Protocol): ...
-
-
+        
 class QueueRouter(ConsumerAddressResolver, Protocol):
-    def bind_msg_type(self, msg_type: type[TMsg], queue_name: str | None = None) -> None:
+    def bind_msg_type(self, msg_type: type[Message], queue_name: str | None = None) -> None:
         """Bind a message type.
 
         queue_name is optional, when not given the router will use a default queue name (or generate one).
