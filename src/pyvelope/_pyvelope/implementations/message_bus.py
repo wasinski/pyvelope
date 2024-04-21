@@ -5,10 +5,10 @@ from pyvelope._pyvelope.abstractions.message_bus import (
     MessageBus as IMessageBus,
     Transport,
 )
-from pyvelope._pyvelope.abstractions.messages import Address, TMsg
+from pyvelope._pyvelope.abstractions.messages import Address, Message, TMsg
 
 
-class MessageBus(IMessageBus[TMsg]):
+class MessageBus(IMessageBus):
     def __init__(self) -> None:
         self._transports: list[Transport] = []
         self.context = None
@@ -16,15 +16,15 @@ class MessageBus(IMessageBus[TMsg]):
     def add_transport(self, transport: Transport) -> None:
         self._transports.append(transport)
 
-    def publish(self, message: TMsg) -> None:
+    def publish(self, message: Message) -> None:
         for transport in self._transports:
             if transport.is_subscribed_to(message):
                 transport.send(message, self.context)
 
     def send(
         self,
-        message: TMsg,
-        address: Address | Consumer[TMsg] | AutoRecipient = AUTO_RECIPIENT,
+        message: Message,
+        address: Address | Consumer[Message] | AutoRecipient = AUTO_RECIPIENT,
     ) -> None:
         if address and isinstance(address, Address):
             for transport in self._transports:

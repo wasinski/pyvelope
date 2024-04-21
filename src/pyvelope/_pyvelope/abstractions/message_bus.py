@@ -1,4 +1,4 @@
-from typing import Generic, NewType, Protocol, TypeVar
+from typing import Final, Generic, NewType, Protocol, TypeVar
 
 from pyvelope._pyvelope.abstractions.json import Json
 from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message
@@ -26,10 +26,9 @@ AUTO_RECIPIENT = AutoRecipient(object())
 Recipient = Address | Consumer[Message]
 
 
-class MessageBus(Protocol): ...
-
+class MessageBus(Protocol):
     def send(
-        self, message: Message, recipient: Recipient[Message] | AutoRecipient = AUTO_RECIPIENT
+        self, message: Message, recipient: Recipient | AutoRecipient = AUTO_RECIPIENT
     ) -> None:
         """Send a message to a single Recipient.
 
@@ -40,16 +39,19 @@ class MessageBus(Protocol): ...
         When making automatic recipient resolution finding exactly one address is expected, thus if none,
         or more than one address if found for the message type an error is raised.
         """
-        
+
     def publish(self, message: Message) -> None:
         """Publish a message to the message bus.
 
         Message will be delivered in a PubSub manner to all consumers that are subscribed
         to this message type.
         """
-        
+
+
 class QueueRouter(ConsumerAddressResolver, Protocol):
-    def bind_msg_type(self, msg_type: type[Message], queue_name: str | None = None) -> None:
+    def bind_msg_type(
+        self, msg_type: type[Message], queue_name: str | None = None
+    ) -> None:
         """Bind a message type.
 
         queue_name is optional, when not given the router will use a default queue name (or generate one).
