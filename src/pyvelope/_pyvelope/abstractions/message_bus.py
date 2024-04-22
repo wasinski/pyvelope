@@ -1,4 +1,4 @@
-from typing import Final, Generic, NewType, Protocol, TypeVar
+from typing import Any, Final, Generic, NewType, Protocol, TypeVar
 
 from pyvelope._pyvelope.abstractions.json import Json
 from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message
@@ -23,7 +23,7 @@ class ConsumerAddressResolver(Protocol):
 
 AutoRecipient = NewType("AutoRecipient", object)
 AUTO_RECIPIENT = AutoRecipient(object())
-Recipient = Address | Consumer[Message]
+Recipient = Address | type[Consumer[Any]]
 
 
 class MessageBus(Protocol):

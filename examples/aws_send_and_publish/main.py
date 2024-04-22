@@ -1,6 +1,6 @@
 from attrs import define
 
-from pyvelope._pyvelope.abstractions.message_bus import Consumer, MessageBus, Address
+from pyvelope._pyvelope.abstractions.message_bus import Consumer, Address
 from pyvelope._pyvelope.abstractions.messages import Envelope
 from pyvelope._pyvelope.implementations.eventbridge.transport import EventbridgeTransport
 from pyvelope._pyvelope.implementations.sqs.transport import SqsQueueUrl, SqsTransport
@@ -23,7 +23,7 @@ class MySecondCommand:
 
 class ConsumerOfSecondCommand(Consumer[MySecondCommand]):
     def consume(self, message: Envelope[MySecondCommand]) -> None:
-        print(f"Received message: {message.body}")
+        print(f"Received message: {message.message.body}")
 
 
 # setup mocks
@@ -70,6 +70,6 @@ received_message = Envelope(
     response_address=SqsQueueUrl(EXAMPLE_SQS_QUEUE_URL),
 )
 message_bus.send(
-    {"body": "Hi! Got your message"}, address=received_message.reply_address()
+    {"body": "Hi! Got your message"}, recipient=received_message.reply_address()
 )
 assert sqs_client.send_message.call_count == 5

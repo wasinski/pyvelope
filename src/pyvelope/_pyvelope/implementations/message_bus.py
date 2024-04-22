@@ -1,3 +1,4 @@
+from typing import Any
 from pyvelope._pyvelope.abstractions.message_bus import (
     AUTO_RECIPIENT,
     AutoRecipient,
@@ -24,17 +25,17 @@ class MessageBus(IMessageBus):
     def send(
         self,
         message: Message,
-        address: Address | Consumer[Message] | AutoRecipient = AUTO_RECIPIENT,
+        recipient: Address | type[Consumer[Any]] | AutoRecipient = AUTO_RECIPIENT,
     ) -> None:
-        if address and isinstance(address, Address):
+        if recipient and isinstance(recipient, Address):
             for transport in self._transports:
-                if transport.supports_address(address):
+                if transport.supports_address(recipient):
                     # ? should we pass the address to the transport?
                     # if so then maybe signature should be changed?
                     # and routing should be made differently, on a separate api?
                     transport.send(message, self.context)
                     return
-            raise AssertionError(f"Address {address} not supported by any transport")
+            raise AssertionError(f"Address {recipient} not supported by any transport")
 
         for transport in self._transports:
             if transport.is_subscribed_to(message):

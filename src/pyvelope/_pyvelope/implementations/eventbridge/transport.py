@@ -29,7 +29,7 @@ class EventbridgeTransport:
     def bind_msg_type(self, msg_type: type[object]) -> None:
         self.bound[msg_type.__name__].append(DEFAULT_BUS)
 
-    def bind_consumer(self, consumer_type: type[Consumer[TMsg]]) -> None:
+    def bind_consumer(self, consumer_type: type[Consumer[Message]]) -> None:
         msg_type = consumer_type.__args__[0]  # !! to be fixed
         self.bound[msg_type.__name__].append(DEFAULT_BUS)
 
