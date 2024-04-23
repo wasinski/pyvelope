@@ -11,7 +11,7 @@ from pyvelope._pyvelope.implementations.sqs.transport import SqsQueueUrl
 json_serializer = json
 
 
-DEFAULT_BUS = object()
+DEFAULT_BUS = object()  # !! type like autorecipient
 
 
 class EventbridgeBusArn(Address):
@@ -24,7 +24,7 @@ class EventbridgeTransport:
         self.eventbridge_client = eventbridge_client
         self.default_bus = default_bus
         self.source = "pyvelope"  # !!
-        self.bound: dict[str, list[str]] = defaultdict(list)  # !!
+        self.bound: dict[str, list[str | object]] = defaultdict(list)  # !!
 
     def bind_msg_type(self, msg_type: type[object]) -> None:
         self.bound[msg_type.__name__].append(DEFAULT_BUS)
