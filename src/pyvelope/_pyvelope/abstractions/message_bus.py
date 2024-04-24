@@ -8,8 +8,8 @@ TMsg = TypeVar("TMsg", bound=Message)
 TMsg_In = TypeVar("TMsg_In", bound=Message, contravariant=True)
 
 
-class Consumer(Protocol[TMsg]):
-    def consume(self, envelope: Envelope[TMsg]) -> None: ...
+class Consumer(Protocol[TMsg_In]):
+    def consume(self, envelope: Envelope[TMsg_In]) -> None: ...
 
 
 class ConsumerAddressResolver(Protocol):

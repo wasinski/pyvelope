@@ -1,6 +1,6 @@
 from attrs import define
 
-from pyvelope._pyvelope.abstractions.message_bus import Consumer, Address
+from pyvelope._pyvelope.abstractions.message_bus import Consumer
 from pyvelope._pyvelope.abstractions.messages import Envelope
 from pyvelope._pyvelope.implementations.eventbridge.transport import EventbridgeTransport
 from pyvelope._pyvelope.implementations.sqs.transport import SqsQueueUrl, SqsTransport

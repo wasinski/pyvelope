@@ -25,11 +25,12 @@ def envelope_from_eventbridge(event: dict[str, Any]) -> Envelope[object]:
     )
 
 
-def lambda_entrypoint(event, _context, service_provider=None) -> object | None:
+def lambda_entrypoint(event: dict[str, Any], _context: dict[str, Any], service_provider: ServiceProvider | None = None) -> object | None:
     message = envelope_from_eventbridge(event)
     service_provider = get_service_provider()
     message_dispatcher = service_provider.message_dispatcher()
     message_dispatcher.dispatch(message)
+    return None
 
 
 # setup globals

@@ -1,4 +1,5 @@
 import functools
+from typing import Any
 
 from dependency_injector import containers, providers
 
@@ -14,7 +15,7 @@ class UnknownConsumerTypeError(Exception):
 
 
 def get_consumer_from_service_provider(
-    service_provider: "ServiceProvider", consumer_type: type[Consumer[Message]]
+    service_provider: type["ServiceProvider"], consumer_type: type[Consumer[Message]]
 ) -> Consumer[Message]:
     if consumer_type == FirstSubscriber:
         return service_provider().first_subscriber()
