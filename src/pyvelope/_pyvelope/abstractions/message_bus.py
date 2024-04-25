@@ -8,12 +8,12 @@ TMsg = TypeVar("TMsg", bound=Message)
 TMsg_In = TypeVar("TMsg_In", bound=Message, contravariant=True)
 
 
-class Consumer(Protocol[TMsg_In]):
-    def consume(self, envelope: Envelope[TMsg_In]) -> None: ...
+class Consumer(Protocol[TMsg]):
+    def consume(self, envelope: Envelope[TMsg]) -> None: ...
 
 
 class ConsumerAddressResolver(Protocol):
-    def resolve_address(self, consumer: Consumer[Message]) -> str:
+    def resolve_consumer_address(self, consumer: Consumer[Message]) -> str | None:
         """Resolve the address of the consumer.
 
         This method should return the address of the consumer, which is used to send
