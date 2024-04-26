@@ -39,7 +39,9 @@ class EventbridgeTransport:
     def send(self, message: Message, context: object | None = None) -> None:
         # wrap message in envelope
         envelope = self.wrap_message(message, context)
-        envelope_serialized = json_serializer.dumps(asdict(envelope), default=str)  # !! wrong serialization
+        envelope_serialized = json_serializer.dumps(
+            asdict(envelope), default=str
+        )  # !! wrong serialization
         self.eventbridge_client.put_events(
             Entries=[
                 {
