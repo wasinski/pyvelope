@@ -20,7 +20,7 @@ class EventbridgeBusArn(Address):
         self.arn = arn
 
 
-class EventbridgeTransport():
+class EventbridgeTransport:
     def __init__(self, eventbridge_client: EventBridgeClient, default_bus: str) -> None:
         self.eventbridge_client = eventbridge_client
         self.default_bus = default_bus
