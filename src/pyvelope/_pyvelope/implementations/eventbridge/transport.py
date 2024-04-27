@@ -3,6 +3,7 @@ from pyvelope._pyvelope.abstractions.message_bus import Consumer, Transport
 from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message, TMsg
 import json
 
+from mypy_boto3_events import EventBridgeClient
 from attrs import asdict
 
 from pyvelope._pyvelope.implementations.sqs.transport import SqsQueueUrl
@@ -19,8 +20,8 @@ class EventbridgeBusArn(Address):
         self.arn = arn
 
 
-class EventbridgeTransport:
-    def __init__(self, eventbridge_client, default_bus: str) -> None:
+class EventbridgeTransport():
+    def __init__(self, eventbridge_client: EventBridgeClient, default_bus: str) -> None:
         self.eventbridge_client = eventbridge_client
         self.default_bus = default_bus
         self.source = "pyvelope"  # !!
@@ -30,7 +31,7 @@ class EventbridgeTransport:
         self.bound[msg_type.__name__].append(DEFAULT_BUS)
 
     def bind_consumer(self, consumer_type: type[Consumer[Message]]) -> None:
-        msg_type = consumer_type.__args__[0]  # !! to be fixed
+        msg_type = consumer_type.__args__[0]  # type: ignore[attr-defined]
         self.bound[msg_type.__name__].append(DEFAULT_BUS)
 
     def is_subscribed_to(self, message: Message) -> bool:

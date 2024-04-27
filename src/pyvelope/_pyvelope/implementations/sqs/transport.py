@@ -3,6 +3,7 @@ from attrs import asdict
 from typing import Callable, Protocol, get_type_hints
 import json
 
+from mypy_boto3_sqs import SQSClient
 from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message, TMsg
 from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
 from pyvelope.simple import get_consumer_envelope_wrapped_type
@@ -17,7 +18,7 @@ class SqsQueueUrl(Address):
 
 
 class SqsTransport(QueueRouter):
-    def __init__(self, sqs_client) -> None:
+    def __init__(self, sqs_client: SQSClient) -> None:
         self.sqs_client = sqs_client
         self.source = "pyvelope"  # !!
         self.bound = defaultdict(list)  # !!
