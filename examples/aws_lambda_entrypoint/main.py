@@ -38,7 +38,7 @@ def lambda_entrypoint(
 
 
 # setup globals
-service_provider = None
+service_provider: ServiceProvider | None = None
 
 # configure the message dispatcher - it's a singleton
 message_dispatcher = get_service_provider().message_dispatcher()
