@@ -33,7 +33,7 @@ class MessageDispatcher:
         self.consumers: dict[str, list[type[Consumer[TMsg]]]] = defaultdict(list)
 
     def register_consumer(self, consumer_type: type[Consumer[TMsg]]) -> None:
-        key: type[TMsg] = get_consumer_envelope_wrapped_type(consumer_type.consume)
+        key: type[TMsg] = get_consumer_envelope_wrapped_type(consumer_type.consume)  # type: ignore[arg-type] # mypy bug?
         self.consumers[key.__name__].append(consumer_type)
 
     def dispatch(self, message: Envelope[TMsg]) -> None:

@@ -21,7 +21,7 @@ class SqsTransport(QueueRouter):
     def __init__(self, sqs_client: SQSClient) -> None:
         self.sqs_client = sqs_client
         self.source = "pyvelope"  # !!
-        self.bound = defaultdict(list)  # !!
+        self.bound: dict[str, list[str]] = defaultdict(list)  # !!
 
     def send(self, message: Message, context: object | None = None) -> None:
         queue_url = "default_queue_url"  # !! to be fixed, taken from params or consumer
@@ -51,7 +51,7 @@ class SqsTransport(QueueRouter):
         thus can be directly referenced.
         """
         msg_type = get_consumer_envelope_wrapped_type(consumer_type.consume)
-        consumer_name = msg_type.__name__
+        consumer_name = msg_type.__name__  # plan is to use this as the queue name
         self.bound[consumer_name].append(consumer_name)
 
     def bind_msg_type(
