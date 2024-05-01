@@ -49,9 +49,7 @@ class MessageBus(Protocol):
 
 
 class QueueRouter(ConsumerAddressResolver, Protocol):
-    def bind_msg_type(
-        self, msg_type: type[Message], queue_name: str | None = None
-    ) -> None:
+    def bind_msg_type(self, msg_type: type[TMsg], queue_name: str | None = None) -> None:
         """Bind a message type.
 
         queue_name is optional, when not given the router will use a default queue name (or generate one).

@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Any
 from pyvelope._pyvelope.abstractions.message_bus import Consumer, Transport
 from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message, TMsg
 import json
@@ -20,17 +21,19 @@ class EventbridgeBusArn(Address):
         self.arn = arn
 
 
-class EventbridgeTransport:
+class EventbridgeTransport(Transport):
     def __init__(self, eventbridge_client: EventBridgeClient, default_bus: str) -> None:
         self.eventbridge_client = eventbridge_client
         self.default_bus = default_bus
         self.source = "pyvelope"  # !!
         self.bound: dict[str, list[str | object]] = defaultdict(list)  # !!
 
-    def bind_msg_type(self, msg_type: type[object]) -> None:
+    def bind_msg_type(
+        self, msg_type: type[TMsg], _: Any = None
+    ) -> None:  # !! should be queue_name/bus_name
         self.bound[msg_type.__name__].append(DEFAULT_BUS)
 
-    def bind_consumer(self, consumer_type: type[Consumer[Message]]) -> None:
+    def bind_consumer(self, consumer_type: type[Consumer[TMsg]]) -> None:
         msg_type = consumer_type.__args__[0]  # type: ignore[attr-defined]
         self.bound[msg_type.__name__].append(DEFAULT_BUS)
 
@@ -55,8 +58,8 @@ class EventbridgeTransport:
         )
 
     def wrap_message(
-        self, message: Message, context: object | None = None
-    ) -> Envelope[Message]:
+        self, message: TMsg, context: object | None = None
+    ) -> Envelope[TMsg]:
         # ?? sender in general needs some rethinking...
         # maybe it's better to have an explicit "respond_to" field?
         # but that might not work in all contexts
@@ -68,3 +71,6 @@ class EventbridgeTransport:
 
     def supports_address(self, address: Address) -> bool:
         return False
+
+    def resolve_consumer_address(self, consumer: Consumer[Message]) -> str | None:
+        raise NotImplementedError("to be refactored")
