@@ -1,7 +1,8 @@
 from collections import defaultdict
 from collections.abc import Callable
-from attrs import evolve
 from typing import get_type_hints
+
+from attrs import evolve
 
 from pyvelope._pyvelope.abstractions.message_bus import Consumer
 from pyvelope._pyvelope.abstractions.messages import Envelope, TMsg

@@ -1,4 +1,5 @@
 from typing import Any
+
 from examples.aws_lambda_entrypoint.consumers import (
     FirstSubscriber,
     SecondSubscriber,

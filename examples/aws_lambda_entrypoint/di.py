@@ -1,5 +1,5 @@
 import functools
-from typing import Any, TypeVar
+from typing import Any
 
 from dependency_injector import containers, providers
 

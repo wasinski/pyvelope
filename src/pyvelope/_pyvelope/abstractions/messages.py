@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Generic, NewType, Protocol, TypeVar
+from typing import Generic, Protocol, TypeVar
 
 from attr import define
 

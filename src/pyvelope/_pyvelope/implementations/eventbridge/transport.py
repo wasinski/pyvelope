@@ -1,14 +1,13 @@
+import json
 from collections import defaultdict
 from typing import Any
-from pyvelope._pyvelope.abstractions.message_bus import Consumer, Transport
-from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message, TMsg
-import json
 
-from mypy_boto3_events import EventBridgeClient
 from attrs import asdict
+from mypy_boto3_events import EventBridgeClient
 
+from pyvelope._pyvelope.abstractions.message_bus import Consumer, Transport
+from pyvelope._pyvelope.abstractions.messages import Address, Envelope, Message, TMsg
 from pyvelope._pyvelope.implementations.sqs.transport import SqsQueueUrl
-
 
 json_serializer = json
 

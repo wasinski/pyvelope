@@ -28,6 +28,7 @@ class ConsumerOfSecondCommand(Consumer[MySecondCommand]):
 
 # setup mocks
 from unittest.mock import Mock
+
 from pyvelope._pyvelope.implementations.message_bus import MessageBus
 
 EXAMPLE_SQS_QUEUE_URL = "https://sqs.us-east-1.amazonaws.com/123456789012/my_queue"

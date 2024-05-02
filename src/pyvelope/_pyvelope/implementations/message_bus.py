@@ -1,12 +1,15 @@
 from typing import Any
+
 from pyvelope._pyvelope.abstractions.message_bus import (
     AUTO_RECIPIENT,
     AutoRecipient,
     Consumer,
-    MessageBus as IMessageBus,
     Transport,
 )
-from pyvelope._pyvelope.abstractions.messages import Address, Message, TMsg
+from pyvelope._pyvelope.abstractions.message_bus import (
+    MessageBus as IMessageBus,
+)
+from pyvelope._pyvelope.abstractions.messages import Address, Message
 
 
 class MessageBus(IMessageBus):

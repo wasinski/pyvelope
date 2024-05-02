@@ -1,13 +1,12 @@
-from collections import defaultdict
-from attrs import asdict
-from typing import Callable, Protocol, get_type_hints
 import json
+from collections import defaultdict
 
+from attrs import asdict
 from mypy_boto3_sqs import SQSClient
-from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message, TMsg
-from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
-from pyvelope.simple import get_consumer_envelope_wrapped_type
 
+from pyvelope._pyvelope.abstractions.message_bus import Consumer, QueueRouter
+from pyvelope._pyvelope.abstractions.messages import Address, Envelope, Message, TMsg
+from pyvelope.simple import get_consumer_envelope_wrapped_type
 
 json_serializer = json
 
@@ -62,7 +61,8 @@ class SqsTransport(QueueRouter):
         This means that this transport will be used to deliver messages of this type to
         consumers that await this message type.
 
-        Method can be used when a consumer is not part of the same codebase as the producer.
+        Method can be used when a consumer
+        is not part of the same codebase as the producer.
         """
         queue_name = queue_name or msg_type.__name__
         self.bound[msg_type.__name__].append(queue_name)

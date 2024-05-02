@@ -1,11 +1,9 @@
-from typing import Any, Final, Generic, NewType, Protocol, TypeVar
+from typing import Any, NewType, Protocol, TypeVar
 
-from pyvelope._pyvelope.abstractions.json import Json
-from pyvelope._pyvelope.abstractions.messages import Envelope, Address, Message
-
+from pyvelope._pyvelope.abstractions.messages import Address, Envelope, Message
 
 TMsg = TypeVar("TMsg", bound=Message)
-TMsg_In = TypeVar("TMsg_In", bound=Message, contravariant=True)
+TMsg_contra = TypeVar("TMsg_contra", bound=Message, contravariant=True)
 
 
 class Consumer(Protocol[TMsg]):
