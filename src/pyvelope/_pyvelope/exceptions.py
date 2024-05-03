@@ -1,4 +1,5 @@
 class PyvelopeError(Exception):
+    """Base class for Pyvelope exceptions."""
     pass
 
 
