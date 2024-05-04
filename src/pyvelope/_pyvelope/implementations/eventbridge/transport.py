@@ -57,7 +57,7 @@ class EventbridgeTransport(Transport):
         )
 
     def wrap_message(
-        self, message: TMsg, context: object | None = None
+        self, message: TMsg, _context: object | None = None
     ) -> Envelope[TMsg]:
         # ?? sender in general needs some rethinking...
         # maybe it's better to have an explicit "respond_to" field?
@@ -68,8 +68,8 @@ class EventbridgeTransport(Transport):
             sender=SqsQueueUrl("invalid"),
         )
 
-    def supports_address(self, address: Address) -> bool:
+    def supports_address(self, _address: Address) -> bool:
         return False
 
-    def resolve_consumer_address(self, consumer: Consumer[Message]) -> str | None:
+    def resolve_consumer_address(self, _consumer: Consumer[Message]) -> str | None:
         raise NotImplementedError("to be refactored")

@@ -7,6 +7,8 @@ from attrs import evolve
 from pyvelope._pyvelope.abstractions.message_bus import Consumer
 from pyvelope._pyvelope.abstractions.messages import Envelope, TMsg
 
+ERROR_CONSUMER_WITHOUT_MESSAGE_TYPE = "Consumer must have a message type"
+
 
 def get_consumer_envelope_wrapped_type(
     func: Callable[[Consumer[TMsg], Envelope[TMsg]], None]
@@ -18,7 +20,7 @@ def get_consumer_envelope_wrapped_type(
     param_type = hints.get("envelope") or hints.get("message") or hints["msg"]
     if hasattr(param_type, "__args__"):
         return param_type.__args__[0]
-    raise ValueError("Consumer must have a message type")
+    raise ValueError(ERROR_CONSUMER_WITHOUT_MESSAGE_TYPE)
 
 
 def serialize(envelope: Envelope[TMsg], msg_type: type[TMsg]) -> Envelope[TMsg]:

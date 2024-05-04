@@ -30,12 +30,13 @@ class MessageBus(Protocol):
     ) -> None:
         """Send a message to a single Recipient.
 
-        If the recipient is AUTO_RECIPIENT the MessageBus will try to resolve it from the message type (or raise).
+        If the recipient is AUTO_RECIPIENT the MessageBus will
+        try to resolve it from the message type (or raise).
         This means that you could have many consumers for the same message type, but .send
         method should be used when you want to send a message to a specific consumer.
 
-        When making automatic recipient resolution finding exactly one address is expected, thus if none,
-        or more than one address if found for the message type an error is raised.
+        When making automatic recipient resolution finding exactly one address is expected,
+        thus if none, or more than one address if found for the message type an error is raised.
         """
 
     def publish(self, message: Message) -> None:
@@ -50,7 +51,8 @@ class QueueRouter(ConsumerAddressResolver, Protocol):
     def bind_msg_type(self, msg_type: type[TMsg], queue_name: str | None = None) -> None:
         """Bind a message type.
 
-        queue_name is optional, when not given the router will use a default queue name (or generate one).
+        queue_name is optional, when not given the router
+        will use a default queue name (or generate one).
         """
 
     def bind_consumer(self, consumer_type: type[Consumer[TMsg]]) -> None:
