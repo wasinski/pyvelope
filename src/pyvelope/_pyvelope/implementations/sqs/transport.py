@@ -81,13 +81,13 @@ class SqsTransport(QueueRouter):
         messages to the consumer.
         """
 
-    def supports_address(self, address: Address) -> bool:
+    def supports_address(self, address: Address) -> bool:  # noqa: PLR6301
         if isinstance(address, SqsQueueUrl):
             return True
         return False
 
-    def wrap_message(
-        self, message: TMsg, context: object | None = None
+    def wrap_message(  # noqa: PLR6301
+        self, message: TMsg, _context: object | None = None
     ) -> Envelope[TMsg]:
         return Envelope(
             message_type=type(message).__name__,

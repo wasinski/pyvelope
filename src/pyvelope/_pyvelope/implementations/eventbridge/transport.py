@@ -56,7 +56,7 @@ class EventbridgeTransport(Transport):
             ]
         )
 
-    def wrap_message(
+    def wrap_message(  # noqa: PLR6301
         self, message: TMsg, _context: object | None = None
     ) -> Envelope[TMsg]:
         # ?? sender in general needs some rethinking...
@@ -68,8 +68,8 @@ class EventbridgeTransport(Transport):
             sender=SqsQueueUrl("invalid"),
         )
 
-    def supports_address(self, _address: Address) -> bool:
+    def supports_address(self, _address: Address) -> bool:  # noqa: PLR6301
         return False
 
     def resolve_consumer_address(self, _consumer: Consumer[Message]) -> str | None:
-        raise NotImplementedError("to be refactored")
+        raise NotImplementedError()  # to be refactored

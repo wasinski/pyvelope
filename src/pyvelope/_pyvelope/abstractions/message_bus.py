@@ -36,7 +36,8 @@ class MessageBus(Protocol):
         method should be used when you want to send a message to a specific consumer.
 
         When making automatic recipient resolution finding exactly one address is expected,
-        thus if none, or more than one address if found for the message type an error is raised.
+        thus if none, or more than one address if found
+        for the message type an error is raised.
         """
 
     def publish(self, message: Message) -> None:
