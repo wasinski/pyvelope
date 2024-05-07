@@ -1,9 +1,7 @@
 from attrs import define
 
-from pyvelope._pyvelope.abstractions.message_bus import Consumer
-from pyvelope._pyvelope.abstractions.messages import Envelope
-from pyvelope._pyvelope.implementations.eventbridge.transport import EventbridgeTransport
-from pyvelope._pyvelope.implementations.sqs.transport import SqsQueueUrl, SqsTransport
+from pyvelope import Consumer, Envelope
+from pyvelope.aws import EventbridgeTransport, SqsQueueUrl, SqsTransport
 
 
 @define
@@ -29,7 +27,7 @@ class ConsumerOfSecondCommand(Consumer[MySecondCommand]):
 # setup mocks
 from unittest.mock import Mock
 
-from pyvelope._pyvelope.implementations.message_bus import MessageBus
+from pyvelope import MessageBus
 
 EXAMPLE_SQS_QUEUE_URL = "https://sqs.us-east-1.amazonaws.com/123456789012/my_queue"
 

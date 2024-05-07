@@ -35,8 +35,8 @@ class MessageBus(Protocol):
         This means that you could have many consumers for the same message type, but .send
         method should be used when you want to send a message to a specific consumer.
 
-        When making automatic recipient resolution finding exactly one address is expected,
-        thus if none, or more than one address if found
+        When making automatic recipient resolution finding exactly one address
+        is expected, thus if none, or more than one address if found
         for the message type an error is raised.
         """
 

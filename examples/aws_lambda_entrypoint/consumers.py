@@ -1,7 +1,6 @@
 from attr import define
 
-from pyvelope._pyvelope.abstractions.message_bus import Consumer
-from pyvelope._pyvelope.abstractions.messages import Envelope
+from pyvelope import Consumer, Envelope
 
 
 class AssertState:

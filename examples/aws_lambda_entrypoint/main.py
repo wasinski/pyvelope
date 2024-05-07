@@ -7,7 +7,7 @@ from examples.aws_lambda_entrypoint.consumers import (
 )
 from examples.aws_lambda_entrypoint.di import ServiceProvider
 from examples.aws_lambda_entrypoint.utils import eventbridge_event_factory
-from pyvelope._pyvelope.abstractions.messages import Envelope
+from pyvelope import Envelope
 
 
 def get_service_provider() -> ServiceProvider:

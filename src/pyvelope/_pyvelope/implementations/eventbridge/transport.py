@@ -72,4 +72,4 @@ class EventbridgeTransport(Transport):
         return False
 
     def resolve_consumer_address(self, _consumer: Consumer[Message]) -> str | None:
-        raise NotImplementedError()  # to be refactored
+        raise NotImplementedError  # to be refactored
