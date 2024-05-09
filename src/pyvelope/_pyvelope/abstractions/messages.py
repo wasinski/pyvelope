@@ -1,10 +1,9 @@
-from abc import ABC
 from typing import Generic, Protocol, TypeVar
 
 from attr import define
 
 
-class Address(ABC):
+class Address(Protocol):
     pass
 
 
