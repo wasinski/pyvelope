@@ -10,6 +10,7 @@ from pyvelope._pyvelope.abstractions.message_bus import (
     MessageBus as IMessageBus,
 )
 from pyvelope._pyvelope.abstractions.messages import Address, Message
+from pyvelope._pyvelope.exceptions import ConfigurationError
 
 
 class MessageBus(IMessageBus):
@@ -38,7 +39,7 @@ class MessageBus(IMessageBus):
                     # and routing should be made differently, on a separate api?
                     transport.send(message, self.context)
                     return
-            raise AssertionError(f"Address {recipient} not supported by any transport")
+            raise ConfigurationError.address_not_supported(recipient)
 
         for transport in self._transports:
             if transport.is_subscribed_to(message):

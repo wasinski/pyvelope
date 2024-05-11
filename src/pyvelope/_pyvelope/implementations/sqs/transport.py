@@ -10,6 +10,19 @@ from pyvelope.simple import get_consumer_envelope_wrapped_type
 
 json_serializer = json
 
+# to be added later
+"""self.sqs_client.send_message(
+            QueueUrl=queue_url,
+            MessageBody=envelope_serialized,
+        )
+            # MessageGroupId=message_group_id,
+            # MessageDeduplicationId=message_deduplication_id,
+            # MessageAttributes=message_attributes,
+            # MessageSystemAttributes=message_system_attributes,
+            # DelaySeconds=delay_seconds,
+
+"""
+
 
 class SqsQueueUrl(Address):
     def __init__(self, url: str) -> None:
@@ -30,11 +43,6 @@ class SqsTransport(QueueRouter):
         self.sqs_client.send_message(
             QueueUrl=queue_url,
             MessageBody=envelope_serialized,
-            # MessageGroupId=message_group_id,
-            # MessageDeduplicationId=message_deduplication_id,
-            # MessageAttributes=message_attributes,
-            # MessageSystemAttributes=message_system_attributes,
-            # DelaySeconds=delay_seconds,
         )
 
     def is_subscribed_to(self, message: object) -> bool:
