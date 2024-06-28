@@ -1,10 +1,11 @@
-from typing import Generic, Protocol, TypeVar
+from typing import Generic, Protocol, TypeVar, runtime_checkable
 
 from attr import define
 
 
+@runtime_checkable
 class Address(Protocol):
-    pass
+    def __str__(self) -> str: ...
 
 
 class Message(Protocol):

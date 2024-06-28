@@ -39,7 +39,7 @@ class MessageBus(IMessageBus):
                     # and routing should be made differently, on a separate api?
                     transport.send(message, self.context)
                     return
-            raise ConfigurationError.address_not_supported(recipient)
+            raise ConfigurationError.address_not_supported(str(recipient))
 
         for transport in self._transports:
             if transport.is_subscribed_to(message):

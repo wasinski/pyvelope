@@ -28,6 +28,9 @@ class SqsQueueUrl(Address):
     def __init__(self, url: str) -> None:
         self.url = url
 
+    def __str__(self) -> str:
+        return self.url
+
 
 class SqsTransport(QueueRouter):
     def __init__(self, sqs_client: SQSClient) -> None:
